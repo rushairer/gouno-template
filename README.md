@@ -25,7 +25,7 @@ go-uno 是一个基于 Go 语言的 Web 应用脚手架，旨在提供一个快�
 ### 克隆项目
 
 ```bash
-git clone {{.RepoURL}}
+git clone {{.ModulePath}}
 cd {{.ProjectName}}
 ```
 
