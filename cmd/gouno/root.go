@@ -9,8 +9,8 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "gouno",
-	Short: "go-uno is a tool to generate go code",
-	Long: `go-uno is a tool to generate go code.
+	Short: "gouno is a tool to generate go code",
+	Long: `gouno is a tool to generate go code.
 It can generate go code from proto file.`,
 }
 
