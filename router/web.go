@@ -9,6 +9,7 @@ import (
 
 func RegisterWebRouter(server *gin.Engine) {
 	registerWebTestRouter(server)
+	registerWebIndexRouter(server)
 }
 
 func registerWebTestRouter(server *gin.Engine) {
@@ -21,4 +22,10 @@ func registerWebTestRouter(server *gin.Engine) {
 			},
 		)
 	}
+}
+
+func registerWebIndexRouter(server *gin.Engine) {
+	server.GET("/", func(ctx *gin.Context) {
+		ctx.String(http.StatusOK, "Hello gouno!")
+	})
 }
