@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rushairer/gouno/gouno"
+	"github.com/rushairer/gouno"
 	"github.com/spf13/cobra"
 	"{{.ModulePath}}/router"
 )
