@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/rushairer/gouno/generator"
 	"github.com/spf13/cobra"
 )
 
