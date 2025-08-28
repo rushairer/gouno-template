@@ -12,6 +12,13 @@ var rootCmd = &cobra.Command{
 	Short: "gouno is a tool to generate go code",
 	Long: `gouno is a tool to generate go code.
 It can generate go code from proto file.`,
+	CompletionOptions: cobra.CompletionOptions{
+		DisableDefaultCmd: true,
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(generator.GeneratorCmd, webCmd)
 }
 
 func Execute() {
