@@ -6,3 +6,6 @@ web_server:
     read_header_timeout: 2s
     write_timeout: 30s
     request_timeout: 10s
+database:
+    driver: mysql
+    dsn: root:123456@tcp(127.0.0.1:3306)/gouno?charset=utf8mb4&parseTime=True&loc=Local

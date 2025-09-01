@@ -12,6 +12,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/rushairer/gouno"
 	"github.com/spf13/cobra"
+	"{{.ModulePath}}/config"
+	"{{.ModulePath}}/middleware"
 	"{{.ModulePath}}/router"
 )
 
@@ -35,11 +37,11 @@ func startWebServer(cmd *cobra.Command, args []string) {
 		log.Fatalf("init config failed, err: %v", err)
 	}
 
-	gouno.GlobalConfig.WebServerConfig.Address = cmd.Flag("address").Value.String()
-	gouno.GlobalConfig.WebServerConfig.Port = cmd.Flag("port").Value.String()
-	gouno.GlobalConfig.WebServerConfig.Debug, _ = cmd.Flags().GetBool("debug")
+	config.GlobalConfig.WebServerConfig.Address = cmd.Flag("address").Value.String()
+	config.GlobalConfig.WebServerConfig.Port = cmd.Flag("port").Value.String()
+	config.GlobalConfig.WebServerConfig.Debug, _ = cmd.Flags().GetBool("debug")
 
-	if gouno.GlobalConfig.WebServerConfig.Debug {
+	if config.GlobalConfig.WebServerConfig.Debug {
 		gin.SetMode(gin.DebugMode)
 	} else {
 		gin.SetMode(gin.ReleaseMode)
@@ -51,17 +53,17 @@ func startWebServer(cmd *cobra.Command, args []string) {
 
 	engine := gin.New()
 	engine.Use(
-		gouno.RecoveryMiddleware(),
-		gouno.TimeoutMiddleware(),
+		middleware.RecoveryMiddleware(),
+		middleware.TimeoutMiddleware(),
 	)
 	router.RegisterWebRouter(engine)
 
 	httpServer := &http.Server{
-		Addr:              fmt.Sprintf("%s:%s", gouno.GlobalConfig.WebServerConfig.Address, gouno.GlobalConfig.WebServerConfig.Port),
-		IdleTimeout:       gouno.GlobalConfig.WebServerConfig.IdleTimeout,
-		WriteTimeout:      gouno.GlobalConfig.WebServerConfig.WriteTimeout,
-		ReadTimeout:       gouno.GlobalConfig.WebServerConfig.ReadTimeout,
-		ReadHeaderTimeout: gouno.GlobalConfig.WebServerConfig.ReadHeaderTimeout,
+		Addr:              fmt.Sprintf("%s:%s", config.GlobalConfig.WebServerConfig.Address, config.GlobalConfig.WebServerConfig.Port),
+		IdleTimeout:       config.GlobalConfig.WebServerConfig.IdleTimeout,
+		WriteTimeout:      config.GlobalConfig.WebServerConfig.WriteTimeout,
+		ReadTimeout:       config.GlobalConfig.WebServerConfig.ReadTimeout,
+		ReadHeaderTimeout: config.GlobalConfig.WebServerConfig.ReadHeaderTimeout,
 		Handler:           engine,
 	}
 
