@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rushairer/gouno"
 	"github.com/spf13/cobra"
 	"{{.ModulePath}}/config"
 	"{{.ModulePath}}/middleware"
@@ -32,7 +31,7 @@ func init() {
 func startWebServer(cmd *cobra.Command, args []string) {
 	log.Printf("starting web server...")
 
-	err := gouno.InitConfig(cmd.Flag("config").Value.String())
+	err := config.InitConfig(cmd.Flag("config").Value.String())
 	if err != nil {
 		log.Fatalf("init config failed, err: %v", err)
 	}
