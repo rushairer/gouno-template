@@ -23,7 +23,7 @@ var webCmd = &cobra.Command{
 }
 
 func init() {
-	webCmd.Flags().StringP("config", "c", "./config", "config file path")
+	webCmd.Flags().StringP("config_path", "c", "./config", "config file path")
 	webCmd.Flags().StringP("address", "a", "0.0.0.0", "address to listen on")
 	webCmd.Flags().StringP("port", "p", "8080", "port to listen on")
 	webCmd.Flags().BoolP("debug", "d", false, "debug mode")
