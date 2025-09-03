@@ -22,23 +22,28 @@ var webCmd = &cobra.Command{
 }
 
 func init() {
-	webCmd.Flags().StringP("config", "c", "./config/config.yaml", "config file path")
+	webCmd.Flags().StringP("config", "c", "./config", "config file path")
 	webCmd.Flags().StringP("address", "a", "0.0.0.0", "address to listen on")
 	webCmd.Flags().StringP("port", "p", "8080", "port to listen on")
 	webCmd.Flags().BoolP("debug", "d", false, "debug mode")
+	webCmd.Flags().StringP("env", "e", "production", "env: development, test, production")
 }
 
 func startWebServer(cmd *cobra.Command, args []string) {
 	log.Printf("starting web server...")
 
-	err := config.InitConfig(cmd.Flag("config").Value.String())
+	env := cmd.Flag("env").Value.String()
+	configPath := cmd.Flag("config_path").Value.String()
+
+	err := config.InitConfig(configPath, env, func() error {
+		viper.BindPFlag("web_server.address", cmd.Flags().Lookup("address"))
+		viper.BindPFlag("web_server.port", cmd.Flags().Lookup("port"))
+		viper.BindPFlag("web_server.debug", cmd.Flags().Lookup("debug"))
+		return nil
+	})
 	if err != nil {
 		log.Fatalf("init config failed, err: %v", err)
 	}
-
-	config.GlobalConfig.WebServerConfig.Address = cmd.Flag("address").Value.String()
-	config.GlobalConfig.WebServerConfig.Port = cmd.Flag("port").Value.String()
-	config.GlobalConfig.WebServerConfig.Debug, _ = cmd.Flags().GetBool("debug")
 
 	if config.GlobalConfig.WebServerConfig.Debug {
 		gin.SetMode(gin.DebugMode)
@@ -53,7 +58,7 @@ func startWebServer(cmd *cobra.Command, args []string) {
 	engine := gin.New()
 	engine.Use(
 		middleware.RecoveryMiddleware(),
-		middleware.TimeoutMiddleware(),
+		middleware.TimeoutMiddleware(config.GlobalConfig.WebServerConfig.RequestTimeout),
 	)
 	router.RegisterWebRouter(engine)
 

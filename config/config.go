@@ -2,14 +2,13 @@ package config
 
 import (
 	"log"
+	"strings"
 	"time"
 
 	"github.com/spf13/viper"
 )
 
 var GlobalConfig GoUnoConfig
-
-var defaultConfig = "./config/config.yaml"
 
 type GoUnoConfig struct {
 	WebServerConfig WebServerConfig `mapstructure:"web_server"`
@@ -28,22 +27,31 @@ type WebServerConfig struct {
 }
 
 type DatabaseConfig struct {
-	Driver string `mapstructure:"driver"`
-	DSN    string `mapstructure:"dsn"`
+	Driver   string `mapstructure:"driver"`
+	DSN      string `mapstructure:"dsn"`
+	LogLevel int    `mapstructure:"log_level"`
 }
 
-func InitConfig(configFile string) (err error) {
+func InitConfig(configPath string, env string, hookFunc func() error) (err error) {
 
-	if configFile == "" {
-		configFile = defaultConfig
-	}
-
-	viper.SetConfigFile(configFile)
+	viper.AddConfigPath(configPath)
+	viper.SetConfigName(env)
 	viper.SetConfigType("yaml")
+
+	viper.SetEnvPrefix("GOUNO")
+	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 	if err = viper.ReadInConfig(); err != nil {
 		log.Fatalf("read config failed, err: %v", err)
 		return
+	}
+
+	if hookFunc != nil {
+		if err = hookFunc(); err != nil {
+			log.Fatalf("hook func failed, err: %v", err)
+			return
+		}
 	}
 
 	if err = viper.Unmarshal(&GlobalConfig); err != nil {

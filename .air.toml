@@ -6,7 +6,7 @@ tmp_dir = "tmp"
   OUTPUT = "./bin/gouno"
 
 [build]
-  args_bin = ["web"]
+  args_bin = ["web -d -e development"]
   bin = "./bin/gouno"
   cmd = "go build -buildvcs=false -gcflags \"-N -l\" -o ./bin/gouno ./cmd"
   delay = 1000
@@ -17,7 +17,7 @@ tmp_dir = "tmp"
   follow_symlink = false
   full_bin = ""
   include_dir = []
-  include_ext = ["go", "tpl", "tmpl", "html"]
+  include_ext = ["go", "tpl", "tmpl", "html", "yaml"]
   include_file = []
   kill_delay = "0s"
   log = "build-errors.log"

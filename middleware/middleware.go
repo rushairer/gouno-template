@@ -2,16 +2,16 @@ package middleware
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-contrib/timeout"
 	"github.com/gin-gonic/gin"
 	"github.com/rushairer/gouno"
-	"{{.ModulePath}}/config"
 )
 
-func TimeoutMiddleware() gin.HandlerFunc {
+func TimeoutMiddleware(requestTimeout time.Duration) gin.HandlerFunc {
 	return timeout.New(
-		timeout.WithTimeout(config.GlobalConfig.WebServerConfig.RequestTimeout),
+		timeout.WithTimeout(requestTimeout),
 		timeout.WithResponse(
 			func(ctx *gin.Context) {
 				ctx.JSON(http.StatusOK, gouno.ErrRequestTimeoutResponse)
