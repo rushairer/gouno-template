@@ -16,23 +16,49 @@ type GoUnoConfig struct {
 }
 
 type WebServerConfig struct {
-	Debug             bool          `mapstructure:"debug"`
-	Address           string        `mapstructure:"address"`
-	Port              string        `mapstructure:"port"`
-	IdleTimeout       time.Duration `mapstructure:"idle_timeout"`
-	ReadTimeout       time.Duration `mapstructure:"read_timeout"`
-	ReadHeaderTimeout time.Duration `mapstructure:"read_header_timeout"`
-	WriteTimeout      time.Duration `mapstructure:"write_timeout"`
-	RequestTimeout    time.Duration `mapstructure:"request_timeout"`
+	Debug              bool          `mapstructure:"debug"`
+	Address            string        `mapstructure:"address"`
+	Port               string        `mapstructure:"port"`
+	IdleTimeout        time.Duration `mapstructure:"idle_timeout"`
+	ReadTimeout        time.Duration `mapstructure:"read_timeout"`
+	ReadHeaderTimeout  time.Duration `mapstructure:"read_header_timeout"`
+	WriteTimeout       time.Duration `mapstructure:"write_timeout"`
+	RequestTimeout     time.Duration `mapstructure:"request_timeout"`
+	RateLimitPerMinute int           `mapstructure:"rate_limit_per_minute"`
+}
+
+type DatabaseConfigDriverName string
+type DatabaseConfigDriver struct {
+	Name     DatabaseConfigDriverName `mapstructure:"name"`
+	Driver   string                   `mapstructure:"driver"`
+	DSN      string                   `mapstructure:"dsn"`
+	LogLevel int                      `mapstructure:"log_level"`
 }
 
 type DatabaseConfig struct {
-	Driver   string `mapstructure:"driver"`
-	DSN      string `mapstructure:"dsn"`
-	LogLevel int    `mapstructure:"log_level"`
+	Default DatabaseConfigDriverName                          `mapstructure:"default"`
+	Drivers map[DatabaseConfigDriverName]DatabaseConfigDriver `mapstructure:"drivers"`
+}
+
+func (c *DatabaseConfig) GetDriver(name DatabaseConfigDriverName) *DatabaseConfigDriver {
+	if driver, ok := c.Drivers[name]; ok {
+		return &driver
+	} else {
+		return nil
+	}
+}
+
+func (c *DatabaseConfig) GetDefaultDriver() *DatabaseConfigDriver {
+	if driver, ok := c.Drivers[c.Default]; ok {
+		return &driver
+	} else {
+		return nil
+	}
 }
 
 func InitConfig(configPath string, env string) (err error) {
+	// 设置所有默认值
+	setConfigDefaults()
 
 	viper.AddConfigPath(configPath)
 	viper.SetConfigName(env)
@@ -53,4 +79,27 @@ func InitConfig(configPath string, env string) (err error) {
 	}
 
 	return
+}
+
+func setConfigDefaults() {
+	// 验证码配置
+	viper.SetDefault("captcha_type", "math")
+
+	// Web服务器配置
+	viper.SetDefault("web_server.debug", false)
+	viper.SetDefault("web_server.address", "0.0.0.0")
+	viper.SetDefault("web_server.port", "8080")
+	viper.SetDefault("web_server.idle_timeout", "60s")
+	viper.SetDefault("web_server.read_timeout", "5s")
+	viper.SetDefault("web_server.read_header_timeout", "2s")
+	viper.SetDefault("web_server.write_timeout", "30s")
+	viper.SetDefault("web_server.request_timeout", "10s")
+	viper.SetDefault("web_server.rate_limit_per_minute", 100)
+
+	// 数据库配置
+	viper.SetDefault("database.default", "sqlite")
+	viper.SetDefault("database.drivers.sqlite.name", "sqlite")
+	viper.SetDefault("database.drivers.sqlite.driver", "sqlite3")
+	viper.SetDefault("database.drivers.sqlite.dsn", ":memory:")
+	viper.SetDefault("database.drivers.sqlite.log_level", 1)
 }
