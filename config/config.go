@@ -3,16 +3,46 @@ package config
 import (
 	"log"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
-var GlobalConfig GoUnoConfig
+var (
+	globalConfig GoUnoConfig
+
+	configMutex sync.RWMutex
+
+	logger *zap.Logger
+)
+
+func GlobalConfig() GoUnoConfig {
+	configMutex.Lock()
+	defer configMutex.Unlock()
+	return globalConfig
+}
+
+// SetLogger 设置配置模块使用的 logger 实例
+func SetLogger(l *zap.Logger) {
+	logger = l
+}
+
+// GetLogger 返回配置模块使用的 logger 实例
+func GetLogger() *zap.Logger {
+	return logger
+}
 
 type GoUnoConfig struct {
-	WebServerConfig WebServerConfig `mapstructure:"web_server"`
-	DatabaseConfig  DatabaseConfig  `mapstructure:"database"`
+	WebServerConfig    WebServerConfig    `mapstructure:"web_server"`
+	DatabaseConfig     DatabaseConfig     `mapstructure:"database"`
+	BigCacheConfig     BigCacheConfig     `mapstructure:"bigcache"`
+	RedisConfig        RedisConfig        `mapstructure:"redis"`
+	TaskPipelineConfig TaskPipelineConfig `mapstructure:"task_pipeline"`
+	SMTPConfig         SMTPConfig         `mapstructure:"smtp"`
+	CaptchaConfig      CaptchaConfig      `mapstructure:"captcha"`
+	LogConfig          LogConfig          `mapstructure:"log"`
 }
 
 type WebServerConfig struct {
@@ -40,7 +70,7 @@ type DatabaseConfig struct {
 	Drivers map[DatabaseConfigDriverName]DatabaseConfigDriver `mapstructure:"drivers"`
 }
 
-func (c *DatabaseConfig) GetDriver(name DatabaseConfigDriverName) *DatabaseConfigDriver {
+func (c DatabaseConfig) GetDriver(name DatabaseConfigDriverName) *DatabaseConfigDriver {
 	if driver, ok := c.Drivers[name]; ok {
 		return &driver
 	} else {
@@ -48,12 +78,48 @@ func (c *DatabaseConfig) GetDriver(name DatabaseConfigDriverName) *DatabaseConfi
 	}
 }
 
-func (c *DatabaseConfig) GetDefaultDriver() *DatabaseConfigDriver {
+func (c DatabaseConfig) GetDefaultDriver() *DatabaseConfigDriver {
 	if driver, ok := c.Drivers[c.Default]; ok {
 		return &driver
 	} else {
 		return nil
 	}
+}
+
+type BigCacheConfig struct {
+	HardMaxCacheSize int `mapstructure:"hard_max_cache_size"`
+}
+
+type RedisConfig struct {
+	DSN                string `mapstructure:"dsn"`
+	MaxActiveConns     int    `mapstructure:"max_active_conns"`
+	PoolTimeoutSeconds int    `mapstructure:"pool_timeout_seconds"`
+}
+
+type TaskPipelineConfig struct {
+	// FlushSize 批处理数据的最大容量
+	FlushSize uint32 `mapstructure:"flush_size"`
+	// BufferSize 缓冲通道的容量
+	BufferSize uint32 `mapstructure:"buffer_size"`
+	// FlushInterval 定时刷新的时间间隔
+	FlushInterval time.Duration `mapstructure:"flush_interval"`
+}
+
+type SMTPConfig struct {
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	Username string `mapstructure:"username"`
+	Password string `mapstructure:"password"`
+	From     string `mapstructure:"from"`
+}
+
+type CaptchaConfig struct {
+	Type string `mapstructure:"type"`
+}
+
+type LogConfig struct {
+	// 日志级别: -1: debug, 0: info, 1: warn, 2: error, 3: fatal, 4: panic 5: fatal
+	Level int `mapstructure:"level"`
 }
 
 func InitConfig(configPath string, env string) (err error) {
@@ -73,7 +139,7 @@ func InitConfig(configPath string, env string) (err error) {
 		return
 	}
 
-	if err = viper.Unmarshal(&GlobalConfig); err != nil {
+	if err = viper.Unmarshal(&globalConfig); err != nil {
 		log.Fatalf("unmarshal config failed, err: %v", err)
 		return
 	}
