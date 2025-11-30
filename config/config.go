@@ -1,38 +1,8 @@
 package config
 
 import (
-	"log"
-	"strings"
-	"sync"
 	"time"
-
-	"github.com/spf13/viper"
-	"go.uber.org/zap"
 )
-
-var (
-	globalConfig GoUnoConfig
-
-	configMutex sync.RWMutex
-
-	logger *zap.Logger
-)
-
-func GlobalConfig() GoUnoConfig {
-	configMutex.Lock()
-	defer configMutex.Unlock()
-	return globalConfig
-}
-
-// SetLogger 设置配置模块使用的 logger 实例
-func SetLogger(l *zap.Logger) {
-	logger = l
-}
-
-// GetLogger 返回配置模块使用的 logger 实例
-func GetLogger() *zap.Logger {
-	return logger
-}
 
 type GoUnoConfig struct {
 	WebServerConfig    WebServerConfig    `mapstructure:"web_server"`
@@ -58,6 +28,7 @@ type WebServerConfig struct {
 }
 
 type DatabaseConfigDriverName string
+
 type DatabaseConfigDriver struct {
 	Name     DatabaseConfigDriverName `mapstructure:"name"`
 	Driver   string                   `mapstructure:"driver"`
@@ -120,52 +91,4 @@ type CaptchaConfig struct {
 type LogConfig struct {
 	// 日志级别: -1: debug, 0: info, 1: warn, 2: error, 3: fatal, 4: panic 5: fatal
 	Level int `mapstructure:"level"`
-}
-
-func InitConfig(configPath string, env string) (err error) {
-	// 设置所有默认值
-	setConfigDefaults()
-
-	viper.AddConfigPath(configPath)
-	viper.SetConfigName(env)
-	viper.SetConfigType("yaml")
-
-	viper.SetEnvPrefix("GOUNO")
-	viper.AutomaticEnv()
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
-
-	if err = viper.ReadInConfig(); err != nil {
-		log.Fatalf("read config failed, err: %v", err)
-		return
-	}
-
-	if err = viper.Unmarshal(&globalConfig); err != nil {
-		log.Fatalf("unmarshal config failed, err: %v", err)
-		return
-	}
-
-	return
-}
-
-func setConfigDefaults() {
-	// 验证码配置
-	viper.SetDefault("captcha_type", "math")
-
-	// Web服务器配置
-	viper.SetDefault("web_server.debug", false)
-	viper.SetDefault("web_server.address", "0.0.0.0")
-	viper.SetDefault("web_server.port", "8080")
-	viper.SetDefault("web_server.idle_timeout", "60s")
-	viper.SetDefault("web_server.read_timeout", "5s")
-	viper.SetDefault("web_server.read_header_timeout", "2s")
-	viper.SetDefault("web_server.write_timeout", "30s")
-	viper.SetDefault("web_server.request_timeout", "10s")
-	viper.SetDefault("web_server.rate_limit_per_minute", 100)
-
-	// 数据库配置
-	viper.SetDefault("database.default", "sqlite")
-	viper.SetDefault("database.drivers.sqlite.name", "sqlite")
-	viper.SetDefault("database.drivers.sqlite.driver", "sqlite3")
-	viper.SetDefault("database.drivers.sqlite.dsn", ":memory:")
-	viper.SetDefault("database.drivers.sqlite.log_level", 1)
 }

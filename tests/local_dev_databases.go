@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"sync"
 
 	_ "github.com/lib/pq"
 
@@ -14,10 +13,10 @@ import (
 )
 
 func NewTestDB() *sql.DB {
-	initTestConfig()
-	dsn := config.GlobalConfig().DatabaseConfig.GetDefaultDriver().DSN
+	configManager := NewTestConfigManager()
 
-	log.Println(dsn)
+	dsn := configManager.Config().DatabaseConfig.GetDefaultDriver().DSN
+
 	if postgres, err := sql.Open("postgres", dsn); err == nil {
 		if err = postgres.Ping(); err == nil {
 			return postgres
@@ -31,17 +30,11 @@ func NewTestDB() *sql.DB {
 	}
 }
 
-var testOnce sync.Once
-
-func initTestConfig() {
-	testOnce.Do(func() {
-		projectRoot := projectRoot()
-		configPath := filepath.Join(projectRoot, "config")
-		err := config.InitConfig(configPath, "test")
-		if err != nil {
-			log.Fatalf("init config failed, err: %v", err)
-		}
-	})
+func NewTestConfigManager() (configManager *config.ConfigManager) {
+	projectRoot := projectRoot()
+	configPath := filepath.Join(projectRoot, "config")
+	configManager = config.NewConfigManager(configPath, "test")
+	return
 }
 
 func projectRoot() string {
