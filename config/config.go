@@ -89,6 +89,6 @@ type CaptchaConfig struct {
 }
 
 type LogConfig struct {
-	// 日志级别: -1: debug, 0: info, 1: warn, 2: error, 3: fatal, 4: panic 5: fatal
+	// 日志级别: -1: Debug, 0: Info, 1: Warn, 2: Error, 3: DPanic, 4: Panic, 5: Fatal
 	Level int `mapstructure:"level"`
 }

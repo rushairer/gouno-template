@@ -1,6 +1,6 @@
 module {{.ModulePath}}
 
-go 1.23.3
+go 1.23
 
 require (
 	github.com/gin-contrib/timeout v1.1.0
