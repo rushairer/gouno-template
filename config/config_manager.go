@@ -5,6 +5,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
@@ -13,7 +14,10 @@ type ConfigManager struct {
 	config      *GoUnoConfig
 }
 
+// NewConfigManager 创建配置管理器。
+// cmd 传入 Cobra 命令以绑定 CLI flag 到配置项，可传 nil。
 func NewConfigManager(
+	cmd *cobra.Command,
 	configPath string,
 	env string,
 ) *ConfigManager {
@@ -29,6 +33,22 @@ func NewConfigManager(
 	v.SetEnvPrefix("GOUNO")
 	v.AutomaticEnv()
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
+	// 将 CLI flag 绑定到局部 viper 实例
+	if cmd != nil {
+		if f := cmd.Flags().Lookup("address"); f != nil {
+			v.BindPFlag("web_server.address", f)
+		}
+		if f := cmd.Flags().Lookup("port"); f != nil {
+			v.BindPFlag("web_server.port", f)
+		}
+		if f := cmd.Flags().Lookup("debug"); f != nil {
+			v.BindPFlag("web_server.debug", f)
+		}
+		if f := cmd.Flags().Lookup("env"); f != nil {
+			v.BindPFlag("gouno_env", f)
+		}
+	}
 
 	if err := v.ReadInConfig(); err != nil {
 		log.Fatalf("read config failed, err: %v", err)
