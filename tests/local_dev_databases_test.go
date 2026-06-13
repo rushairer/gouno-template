@@ -33,7 +33,10 @@ func NewTestDB() *sql.DB {
 func NewTestConfigManager() (configManager *config.ConfigManager) {
 	projectRoot := projectRoot()
 	configPath := filepath.Join(projectRoot, "config")
-	configManager = config.NewConfigManager(nil, configPath, "test")
+	configManager, err := config.NewConfigManager(nil, configPath, "test")
+	if err != nil {
+		log.Panic(err)
+	}
 	return
 }
 

@@ -40,7 +40,10 @@ func startWebServer(cmd *cobra.Command, args []string) {
 	configPath := cmd.Flag("config_path").Value.String()
 	env := cmd.Flag("env").Value.String()
 
-	configManager := config.NewConfigManager(cmd, configPath, env)
+	configManager, err := config.NewConfigManager(cmd, configPath, env)
+	if err != nil {
+		log.Fatalf("load config: %v", err)
+	}
 	globalConfig := configManager.Config()
 
 	if globalConfig.WebServerConfig.Debug {

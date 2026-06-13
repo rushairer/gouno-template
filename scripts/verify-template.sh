@@ -12,4 +12,5 @@ export PROJECT_NAME="gouno_template_smoke"
 
 cd "$tmp/project"
 go mod tidy
+go mod download all
 go test ./...

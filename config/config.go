@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -91,4 +92,38 @@ type CaptchaConfig struct {
 type LogConfig struct {
 	// 日志级别: -1: Debug, 0: Info, 1: Warn, 2: Error, 3: DPanic, 4: Panic, 5: Fatal
 	Level int `mapstructure:"level"`
+}
+
+func (c GoUnoConfig) Validate() error {
+	if c.WebServerConfig.Port == "" {
+		return fmt.Errorf("web_server: port is required")
+	}
+	if c.WebServerConfig.IdleTimeout <= 0 {
+		return fmt.Errorf("web_server: idle_timeout must be positive")
+	}
+	if c.WebServerConfig.ReadTimeout <= 0 {
+		return fmt.Errorf("web_server: read_timeout must be positive")
+	}
+	if c.WebServerConfig.ReadHeaderTimeout <= 0 {
+		return fmt.Errorf("web_server: read_header_timeout must be positive")
+	}
+	if c.WebServerConfig.WriteTimeout <= 0 {
+		return fmt.Errorf("web_server: write_timeout must be positive")
+	}
+	if c.WebServerConfig.RequestTimeout <= 0 {
+		return fmt.Errorf("web_server: request_timeout must be positive")
+	}
+	if c.WebServerConfig.RateLimitPerMinute <= 0 {
+		return fmt.Errorf("web_server: rate_limit_per_minute must be positive")
+	}
+	if c.DatabaseConfig.GetDefaultDriver() == nil {
+		return fmt.Errorf("database: no default driver configured")
+	}
+	if c.DatabaseConfig.GetDefaultDriver().DSN == "" {
+		return fmt.Errorf("database: default driver DSN is empty")
+	}
+	if c.LogConfig.Level < -1 || c.LogConfig.Level > 5 {
+		return fmt.Errorf("log: level must be between -1 and 5")
+	}
+	return nil
 }
