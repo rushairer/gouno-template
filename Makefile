@@ -15,6 +15,9 @@ dev:
 	fi
 	air -c .air.toml
 test:
+	./scripts/verify-template.sh
+
+test-ui:
 	@if ! command -v goconvey &> /dev/null; then \
 		go install github.com/smartystreets/goconvey@latest; \
 	fi
