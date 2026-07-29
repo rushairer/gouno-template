@@ -140,8 +140,8 @@ github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZV
 github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
 github.com/rushairer/go-pipeline/v2 v2.2.2 h1:T0FJqQI5gRczl272HczyaLq37jyQteoCEEGAeLp/TBo=
 github.com/rushairer/go-pipeline/v2 v2.2.2/go.mod h1:iry0n8BldFMGT5OygmXPIunUi13IxUWrNdANXdRX/Fo=
-github.com/rushairer/gouno v1.0.0 h1:hggjiV655R5W1BtR8Qy0ZfRWCLdzn90iHDh+hKK8Ndc=
-github.com/rushairer/gouno v1.0.0/go.mod h1:uRfJbIFLTG4aVFnH6zlvrifgF7U9HHALtj+A6egvewM=
+github.com/rushairer/gouno v1.0.2 h1:o3hqY2y8+HhkDcBzLFIz7oTnZAjEEZwsJCU2G9AuKJw=
+github.com/rushairer/gouno v1.0.2/go.mod h1:uRfJbIFLTG4aVFnH6zlvrifgF7U9HHALtj+A6egvewM=
 github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf35Ld67mk=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/sagikazarmark/locafero v0.7.0 h1:5MqpDsTGNDhY8sGp0Aowyf0qKsPrhewaLSsFaodPcyo=

@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+## [1.0.2] - 2026-07-29
+
+### Fixed
+
+- Require `gouno` v1.0.2 so generated projects include the response constructors used by the middleware.
+- Import `fmt` in the recovery middleware so generated projects compile successfully.
+
 ## [1.0.1] - 2026-06-13
 
 ### Changed

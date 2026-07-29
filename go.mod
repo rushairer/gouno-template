@@ -6,7 +6,7 @@ require (
 	github.com/gin-contrib/timeout v1.1.0
 	github.com/gin-gonic/gin v1.11.0
 	github.com/lib/pq v1.12.3
-	github.com/rushairer/gouno v1.0.0
+	github.com/rushairer/gouno v1.0.2
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
 	go.uber.org/zap v1.28.0
