@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Remove unsupported `${VAR}` placeholders from `config/production.yaml` so the default `web` command (production env) can start; sensitive values can now be overridden via `GOUNO_` prefixed environment variables.
+- Fix README to match the actual CLI flags (`--config_path`, `--env`) and the `suite`/`task` generator commands.
+- Fix the `captcha_type` default key to `captcha.type` in the config manager.
+- Remove the ineffective `gouno_env` pflag binding in the config manager.
+- Make `NewTestDB` use the configured default database driver instead of hardcoding postgres.
+- Remove dead `os.Exit(1)` in `Execute` and a stray newline in the listen error log.
+- Use separate `args_bin` entries in `.air.toml`.
+
 ## [1.0.2] - 2026-07-29
 
 ### Fixed

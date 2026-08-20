@@ -87,7 +87,7 @@ func startWebServer(cmd *cobra.Command, args []string) {
 
 	go func() {
 		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("listen: %s\n", err)
+			log.Fatalf("listen: %s", err)
 		}
 	}()
 
