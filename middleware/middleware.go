@@ -9,6 +9,7 @@ import (
 	"github.com/gin-contrib/timeout"
 	"github.com/gin-gonic/gin"
 	"github.com/rushairer/gouno"
+	gounoMiddleware "github.com/rushairer/gouno/middleware"
 )
 
 func TimeoutMiddleware(requestTimeout time.Duration) gin.HandlerFunc {
@@ -36,18 +37,11 @@ func RecoveryMiddleware() gin.HandlerFunc {
 	)
 }
 
-// SecurityHeadersMiddleware sets common security response headers.
+// SecurityHeadersMiddleware sets common security response headers via gouno middleware.
 func SecurityHeadersMiddleware(isProduction bool) gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		ctx.Header("X-Content-Type-Options", "nosniff")
-		ctx.Header("X-Frame-Options", "DENY")
-		ctx.Header("X-XSS-Protection", "0")
-		ctx.Header("Referrer-Policy", "strict-origin-when-cross-origin")
-		if isProduction {
-			ctx.Header("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
-		}
-		ctx.Header("Permissions-Policy", "geolocation=(), camera=(), microphone=(), payment=()")
-		ctx.Header("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'")
-		ctx.Next()
-	}
+	return gounoMiddleware.SecurityHeaders(gounoMiddleware.SecurityHeadersOptions{
+		IsProduction:      isProduction,
+		PermissionsPolicy: "geolocation=(), camera=(), microphone=(), payment=()",
+		CSP:               "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'",
+	})
 }

@@ -51,6 +51,17 @@ func NewConfigManager(
 		return nil, fmt.Errorf("read config: %w", err)
 	}
 
+	// 尝试读取并合并本地覆盖配置 (例如 development.local.yaml)
+	localViper := viper.New()
+	localViper.AddConfigPath(configPath)
+	localViper.SetConfigName(env + ".local")
+	localViper.SetConfigType("yaml")
+	if err := localViper.ReadInConfig(); err == nil {
+		if err := v.MergeConfigMap(localViper.AllSettings()); err != nil {
+			return nil, fmt.Errorf("merge local config: %w", err)
+		}
+	}
+
 	newConfig := GoUnoConfig{}
 	if err := v.Unmarshal(&newConfig); err != nil {
 		return nil, fmt.Errorf("unmarshal config: %w", err)
