@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.1.0] - 2026-08-20
+
+### Changed
+
+- Delegate `SecurityHeadersMiddleware` to `gouno/middleware.SecurityHeaders` instead of maintaining a custom header-setting implementation (`middleware/middleware.go`).
+
+### Added
+
+- Add unit test suite `tests/web_router_test.go` verifying root (`/`) and health check (`/test/alive`) endpoints.
 
 ### Fixed
 

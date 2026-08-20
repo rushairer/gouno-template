@@ -11,6 +11,9 @@ export PROJECT_NAME="gouno_template_smoke"
 "$root/scripts/render-template.sh" "$tmp/project" "$MODULE_PATH" "$PROJECT_NAME"
 
 cd "$tmp/project"
+if [ -d "$root/../gouno" ]; then
+  go mod edit -replace github.com/rushairer/gouno="$root/../gouno"
+fi
 go mod tidy
 go mod download all
 go test ./...

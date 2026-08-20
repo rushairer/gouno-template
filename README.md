@@ -109,9 +109,12 @@ Use "gouno generator [command] --help" for more information about a command.
 -   `make run`: Runs the development server
 -   `make dev`: Runs in development mode
 
-### Configuration File
+### Configuration Management
 
-Configuration files are located in `./config/` (`development.yaml`, `test.yaml`, `production.yaml`), selected by the `--env` flag. You can modify the configuration items as needed. Sensitive values can be overridden via environment variables prefixed with `GOUNO_` (e.g. `GOUNO_DATABASE_DRIVERS_POSTGRES_DSN`).
+Configuration files are located in the `./config/` directory and selected by the `--env` (`-e`) flag:
+- `development.yaml`: Local development settings (pre-configured with local defaults like SQLite, ready for `make dev`).
+- `test.yaml`: Automated testing / CI settings (uses in-memory database).
+- `production.yaml`: Production structure skeleton (sensitive fields left empty or placeholder).
 
 ```yaml
 web_server:
@@ -119,6 +122,25 @@ web_server:
     port: 8080
     debug: false
 ```
+
+#### Configuration Overrides & Security Best Practices
+
+To prevent sensitive secrets and passwords from being accidentally committed to Git, the project supports a hierarchical configuration system:
+
+1. **Local File Override (`<env>.local.yaml`)**:
+   Create a `<env>.local.yaml` file in the `./config/` directory (e.g. `development.local.yaml`, `production.local.yaml`).
+   - Settings in this file will automatically merge and override the base `<env>.yaml`.
+   - `config/*.local.yaml` is already added to `.gitignore`, keeping your private keys safe.
+2. **Environment Variable Override (`GOUNO_*`)**:
+   Any configuration field can be overridden via environment variables prefixed with `GOUNO_` (using `_` for nested dots).
+   - Example: `GOUNO_DATABASE_DRIVERS_POSTGRES_DSN="host=..."` overrides `database.drivers.postgres.dsn`.
+   - Example: `GOUNO_WEB_SERVER_PORT="9000"` overrides `web_server.port`.
+3. **CLI Flags**:
+   Command-line flags (`-a`, `-p`, `-d`, etc.) take the highest priority.
+
+#### Loading Priority
+
+> CLI Flags > Environment Variables (`GOUNO_*`) > Local Overrides (`<env>.local.yaml`) > Base Config (`<env>.yaml`) > Code Defaults
 
 ### Routing Example
 
@@ -254,9 +276,12 @@ Use "gouno generator [command] --help" for more information about a command.
 -   `make run`: 运行开发服务器
 -   `make dev`: 运行开发模式
 
-### 配置文件
+### 配置管理
 
-配置文件位于 `./config/` 目录（`development.yaml`、`test.yaml`、`production.yaml`），由 `--env` 参数选择。您可以根据需要修改其中的配置项。生产环境的敏感信息可以通过以 `GOUNO_` 为前缀的环境变量覆盖（例如 `GOUNO_DATABASE_DRIVERS_POSTGRES_DSN`）。
+配置文件位于 `./config/` 目录，由 `--env`（`-e`）参数选择加载：
+- `development.yaml`: 本地开发环境配置（预设 SQLite/本地服务，支持 `make dev` 开箱即用）。
+- `test.yaml`: 自动化测试与 CI 环境配置（预设内存数据库等）。
+- `production.yaml`: 生产环境配置骨架（敏感项留空或使用占位符）。
 
 ```yaml
 web_server:
@@ -264,6 +289,25 @@ web_server:
     port: 8080
     debug: false
 ```
+
+#### 配置覆盖与安全防泄露规范
+
+为避免开发者将真实密码或私有密钥意外提交到 Git 仓库，项目提供了多层覆盖机制：
+
+1. **本地私有配置覆盖（`<env>.local.yaml`）**：
+   在 `./config/` 目录下创建 `<env>.local.yaml`（例如 `development.local.yaml` 或 `production.local.yaml`）。
+   - 该文件中的配置会自动合并并覆盖基础 `<env>.yaml`。
+   - `config/*.local.yaml` 已经被 `.gitignore` 忽略，安全存放个人开发环境的私有账号密码。
+2. **环境变量覆盖（`GOUNO_*`）**：
+   生产环境推荐使用以 `GOUNO_` 为前缀的大写环境变量覆盖任意配置项（层级用下划线 `_` 分隔）。
+   - 例如：`GOUNO_DATABASE_DRIVERS_POSTGRES_DSN="host=..."` 自动覆盖 `database.drivers.postgres.dsn`。
+   - 例如：`GOUNO_WEB_SERVER_PORT="9000"` 覆盖 `web_server.port`。
+3. **命令行参数（CLI Flags）**：
+   命令行参数（如 `-a`、`-p`、`-d`）拥有最高优先级。
+
+#### 配置加载优先级
+
+> 命令行参数 > 环境变量 (`GOUNO_*`) > 本地私有配置 (`<env>.local.yaml`) > 基础配置文件 (`<env>.yaml`) > 代码内置默认值 (Default)
 
 ### 路由示例
 

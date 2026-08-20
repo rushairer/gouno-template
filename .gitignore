@@ -1,2 +1,5 @@
 bin
 tmp
+config/*.local.yaml
+.env
+.env.*
