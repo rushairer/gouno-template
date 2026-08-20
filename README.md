@@ -38,7 +38,7 @@ make
 ### Run Web Service
 
 ```bash
-./bin/gouno web --config ./config/config.yaml --address 0.0.0.0 --port 8080
+./bin/gouno web --config_path ./config --env production --address 0.0.0.0 --port 8080
 ```
 
 By default, the web service will start at `http://0.0.0.0:8080`.
@@ -47,7 +47,8 @@ By default, the web service will start at `http://0.0.0.0:8080`.
 
 ##### Command Line Arguments
 
--   `--config` or `-c`: Specifies the configuration file path, defaults to `./config/config.yaml`.
+-   `--config_path` or `-c`: Specifies the config directory path, defaults to `./config`.
+-   `--env` or `-e`: Specifies the environment (development, test, production), defaults to `production`. The matching `<env>.yaml` file is loaded from the config directory.
 -   `--address` or `-a`: Specifies the listening address, defaults to `0.0.0.0`.
 -   `--port` or `-p`: Specifies the listening port, defaults to `8080`.
 -   `--debug` or `-d`: Enables debug mode, defaults to `false`.
@@ -78,7 +79,8 @@ Available Commands:
   domain      Generate domain
   repository  Generate repository
   service     Generate service
-  suit        Generate suit (domain, repository, service)
+  suite       Generate suite (domain, repository, service)
+  task        Generate task
 
 Flags:
   -h, --help   help for generator
@@ -109,7 +111,7 @@ Use "gouno generator [command] --help" for more information about a command.
 
 ### Configuration File
 
-The configuration file is located at `./config/config.yaml`, and you can modify the configuration items as needed.
+Configuration files are located in `./config/` (`development.yaml`, `test.yaml`, `production.yaml`), selected by the `--env` flag. You can modify the configuration items as needed. Sensitive values can be overridden via environment variables prefixed with `GOUNO_` (e.g. `GOUNO_DATABASE_DRIVERS_POSTGRES_DSN`).
 
 ```yaml
 web_server:
@@ -181,7 +183,7 @@ make
 ### 运行 Web 服务
 
 ```bash
-./bin/gouno web --config ./config/config.yaml --address 0.0.0.0 --port 8080
+./bin/gouno web --config_path ./config --env production --address 0.0.0.0 --port 8080
 ```
 
 默认情况下，Web 服务将在 `http://0.0.0.0:8080` 启动。
@@ -190,7 +192,8 @@ make
 
 ##### 命令行参数
 
--   `--config` 或 `-c`: 指定配置文件路径，默认为 `./config/config.yaml`。
+-   `--config_path` 或 `-c`: 指定配置文件目录，默认为 `./config`。
+-   `--env` 或 `-e`: 指定环境（development、test、production），默认为 `production`，将加载配置目录下对应的 `<env>.yaml`。
 -   `--address` 或 `-a`: 指定监听地址，默认为 `0.0.0.0`。
 -   `--port` 或 `-p`: 指定监听端口，默认为 `8080`。
 -   `--debug` 或 `-d`: 开启调试模式，默认为 `false`。
@@ -221,7 +224,8 @@ Available Commands:
   domain      Generate domain
   repository  Generate repository
   service     Generate service
-  suit        Generate suit (domain, repository, service)
+  suite       Generate suite (domain, repository, service)
+  task        Generate task
 
 Flags:
   -h, --help   help for generator
@@ -252,7 +256,7 @@ Use "gouno generator [command] --help" for more information about a command.
 
 ### 配置文件
 
-配置文件位于 `./config/config.yaml`，您可以根据需要修改其中的配置项。
+配置文件位于 `./config/` 目录（`development.yaml`、`test.yaml`、`production.yaml`），由 `--env` 参数选择。您可以根据需要修改其中的配置项。生产环境的敏感信息可以通过以 `GOUNO_` 为前缀的环境变量覆盖（例如 `GOUNO_DATABASE_DRIVERS_POSTGRES_DSN`）。
 
 ```yaml
 web_server:

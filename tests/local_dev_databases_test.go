@@ -15,19 +15,27 @@ import (
 func NewTestDB() *sql.DB {
 	configManager := NewTestConfigManager()
 
-	dsn := configManager.Config().DatabaseConfig.GetDefaultDriver().DSN
-
-	if postgres, err := sql.Open("postgres", dsn); err == nil {
-		if err = postgres.Ping(); err == nil {
-			return postgres
-		} else {
-			log.Panic(err)
-			return nil
-		}
-	} else {
-		log.Panic(err)
-		return nil
+	driverConfig := configManager.Config().DatabaseConfig.GetDefaultDriver()
+	if driverConfig == nil {
+		log.Panic("no default database driver configured")
 	}
+
+	// lib/pq 以 "postgres" 名称注册驱动;配置中的 driver 字段可能是 "pgx"/"postgres"/"sqlite3" 等。
+	// 若使用其他驱动,请先在测试中导入对应的 database/sql 驱动包。
+	driverName := driverConfig.Driver
+	switch driverName {
+	case "pgx", "postgres":
+		driverName = "postgres"
+	}
+
+	db, err := sql.Open(driverName, driverConfig.DSN)
+	if err != nil {
+		log.Panic(err)
+	}
+	if err := db.Ping(); err != nil {
+		log.Panic(err)
+	}
+	return db
 }
 
 func NewTestConfigManager() (configManager *config.ConfigManager) {

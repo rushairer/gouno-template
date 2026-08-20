@@ -6,7 +6,7 @@ tmp_dir = "tmp"
   OUTPUT = "./bin/gouno"
 
 [build]
-  args_bin = ["web -d -e development"]
+  args_bin = ["web", "-d", "-e", "development"]
   bin = "./bin/gouno"
   cmd = "go build -buildvcs=false -gcflags \"-N -l\" -o ./bin/gouno ./cmd"
   delay = 1000

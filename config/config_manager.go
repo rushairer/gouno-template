@@ -45,9 +45,6 @@ func NewConfigManager(
 		if f := cmd.Flags().Lookup("debug"); f != nil {
 			v.BindPFlag("web_server.debug", f)
 		}
-		if f := cmd.Flags().Lookup("env"); f != nil {
-			v.BindPFlag("gouno_env", f)
-		}
 	}
 
 	if err := v.ReadInConfig(); err != nil {
@@ -82,7 +79,7 @@ func (cm *ConfigManager) Config() GoUnoConfig {
 
 func (cm *ConfigManager) setConfigDefaults(v *viper.Viper) {
 	// 验证码配置
-	v.SetDefault("captcha_type", "math")
+	v.SetDefault("captcha.type", "math")
 
 	// Web服务器配置
 	v.SetDefault("web_server.debug", false)
