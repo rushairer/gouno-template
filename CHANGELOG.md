@@ -5,18 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
-
 ## [1.2.0] - 2026-08-24
 
 ### Changed
 
-- Generated projects now require Go 1.25.0 or newer and use `gouno` v1.2.0; CI validates Go 1.25.x and 1.26.x.
+- Generated projects now require Go 1.25.0 or newer and use `gouno` v1.2.0; validated by `scripts/verify-template.sh`.
 - Template verification now uses the published framework by default. Local framework replacement is available only through explicit `GOUNO_REPLACE_DIR`.
 
 ### Security
 
-- Add rendered-project formatting, tidy, race, vet, vulnerability, and lint gates through the SHA-pinned shared CI workflow.
+- Add rendered-project formatting, tidy, race, vet, vulnerability, and lint gates to `scripts/verify-template.sh`.
 
 ## [1.1.0] - 2026-08-20
 
