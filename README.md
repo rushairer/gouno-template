@@ -18,7 +18,7 @@
 
 ### Prerequisites
 
--   Go 1.23.3+ environment
+-   Go 1.25.0+ environment (CI validates Go 1.25.x and 1.26.x; Go 1.23/1.24 are unsupported)
 
 ### Clone Project
 
@@ -185,7 +185,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ### 前提条件
 
--   Go 1.23.3+ 环境
+-   Go 1.25.0+ 环境（CI 验证 Go 1.25.x 与 1.26.x；不再支持 Go 1.23/1.24）
 
 ### 克隆项目
 
