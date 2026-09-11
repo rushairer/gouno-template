@@ -1,0 +1,14 @@
+package repository
+
+import "context"
+
+type {{ camel (arg "name") }}Repository struct {
+}
+
+func New{{ camel (arg "name") }}Repository() *{{ camel (arg "name") }}Repository {
+	return &{{ camel (arg "name") }}Repository{}
+}
+
+func (r *{{ camel (arg "name") }}Repository) Foo(ctx context.Context) (bar string, err error) {
+	return
+}
