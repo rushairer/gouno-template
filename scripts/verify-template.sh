@@ -24,6 +24,9 @@ if ! cmp -s go.mod "$tmp/go.mod.before"; then
 fi
 if ! cmp -s go.sum "$tmp/go.sum.before"; then
   diff -u "$tmp/go.sum.before" go.sum || true
+  echo "--- tidy-go.sum-begin ---"
+  cat go.sum
+  echo "--- tidy-go.sum-end ---"
   exit 1
 fi
 go mod download all
