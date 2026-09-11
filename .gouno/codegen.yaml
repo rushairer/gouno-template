@@ -1,0 +1,127 @@
+schema: gouno.dev/codegen/v1
+command:
+  use: gen
+  short: Generate project code
+  aliases: [generator]
+
+generators:
+  - name: controller
+    aliases: [c]
+    short: Generate controller
+    args:
+      - name: name
+        required: true
+    flags:
+      - name: path
+        shorthand: p
+        type: string
+        default: internal/controller
+        description: path to controller
+      - name: force
+        shorthand: f
+        type: bool
+        default: false
+        description: force overwrite
+    outputs:
+      - template: .gouno/codegen/controller.tmpl
+        path: '{{ flag "path" }}/{{ arg "name" }}.go'
+
+  - name: domain
+    aliases: [d]
+    short: Generate domain
+    args:
+      - name: name
+        required: true
+    flags:
+      - name: path
+        shorthand: p
+        type: string
+        default: internal/domain
+        description: path to domain
+      - name: force
+        shorthand: f
+        type: bool
+        default: false
+        description: force overwrite
+    outputs:
+      - template: .gouno/codegen/domain.tmpl
+        path: '{{ flag "path" }}/{{ arg "name" }}.go'
+
+  - name: repository
+    aliases: [r]
+    short: Generate repository
+    args:
+      - name: name
+        required: true
+    flags:
+      - name: path
+        shorthand: p
+        type: string
+        default: internal/repository
+        description: path to repository
+      - name: force
+        shorthand: f
+        type: bool
+        default: false
+        description: force overwrite
+    outputs:
+      - template: .gouno/codegen/repository.tmpl
+        path: '{{ flag "path" }}/{{ arg "name" }}.go'
+
+  - name: service
+    aliases: [s]
+    short: Generate service
+    args:
+      - name: name
+        required: true
+    flags:
+      - name: path
+        shorthand: p
+        type: string
+        default: internal/service
+        description: path to service
+      - name: force
+        shorthand: f
+        type: bool
+        default: false
+        description: force overwrite
+    outputs:
+      - template: .gouno/codegen/service.tmpl
+        path: '{{ flag "path" }}/{{ arg "name" }}.go'
+
+  - name: task
+    aliases: [t]
+    short: Generate task
+    args:
+      - name: name
+        required: true
+    flags:
+      - name: path
+        shorthand: p
+        type: string
+        default: internal/task
+        description: path to task
+      - name: force
+        shorthand: f
+        type: bool
+        default: false
+        description: force overwrite
+    outputs:
+      - template: .gouno/codegen/task.tmpl
+        path: '{{ flag "path" }}/{{ arg "name" }}.go'
+
+  - name: suite
+    short: Generate suite (domain, repository, service)
+    args:
+      - name: name
+        required: true
+    flags:
+      - name: force
+        shorthand: f
+        type: bool
+        default: false
+        description: force overwrite
+    compose:
+      - domain
+      - repository
+      - service
