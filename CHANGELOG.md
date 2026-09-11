@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Formally name the default template's architecture profile **Flat Layered** and document its intended use for simpler applications, while distinguishing it from Capability Module project/template policies used by more complex applications.
+
 ## [1.3.0] - 2026-09-11
 
 ### Added
