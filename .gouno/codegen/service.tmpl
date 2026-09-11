@@ -1,0 +1,14 @@
+package service
+
+import "context"
+
+type {{ camel (arg "name") }}Service struct {
+}
+
+func New{{ camel (arg "name") }}Service() *{{ camel (arg "name") }}Service {
+	return &{{ camel (arg "name") }}Service{}
+}
+
+func (s *{{ camel (arg "name") }}Service) Foo(ctx context.Context) (bar string, err error) {
+	return
+}
