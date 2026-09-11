@@ -1,0 +1,14 @@
+package task
+
+import "context"
+
+type {{ camel (arg "name") }}Task struct {
+}
+
+func New{{ camel (arg "name") }}Task() *{{ camel (arg "name") }}Task {
+	return &{{ camel (arg "name") }}Task{}
+}
+
+func (t *{{ camel (arg "name") }}Task) Run(ctx context.Context) error {
+	return nil
+}
