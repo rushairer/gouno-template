@@ -18,7 +18,7 @@ Do not assume a generator exists because an older Gouno release once provided it
 
 When changing Codegen policy, update the manifest and its referenced templates together and verify the generated output compiles and follows the project architecture.
 
-`.gouno/codegen.yaml` and `.gouno/codegen/**` are runtime template resources. They must survive project bootstrap verbatim; their `{{ ... }}` expressions are evaluated later by Codegen, not by the initial project renderer.
+`.gouno/codegen.yaml` and `.gouno/codegen/**` are runtime template resources. They must survive project bootstrap verbatim; their Codegen template expressions are evaluated later by Codegen, not by the initial project renderer.
 
 ## Optional capability
 
