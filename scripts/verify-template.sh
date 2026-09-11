@@ -18,8 +18,14 @@ fi
 cp go.mod "$tmp/go.mod.before"
 cp go.sum "$tmp/go.sum.before"
 go mod tidy
-cmp -s go.mod "$tmp/go.mod.before"
-cmp -s go.sum "$tmp/go.sum.before"
+if ! cmp -s go.mod "$tmp/go.mod.before"; then
+  diff -u "$tmp/go.mod.before" go.mod || true
+  exit 1
+fi
+if ! cmp -s go.sum "$tmp/go.sum.before"; then
+  diff -u "$tmp/go.sum.before" go.sum || true
+  exit 1
+fi
 go mod download all
 
 gofmt -w .
