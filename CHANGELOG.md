@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-09-11
+
 ### Added
 
 - Add `.gouno/codegen.yaml` using the `gouno.dev/codegen/v1` protocol.
@@ -17,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - The generated project CLI now attaches codegen dynamically from the template manifest; templates without the manifest expose no `gen` command.
 - Move concrete generator policy out of the `gouno` core library and into this default project template.
 - Remove the legacy top-level `templates/*.tmpl` codegen set so the manifest and `.gouno/codegen/` are the single source of truth.
+- Require `github.com/rushairer/gouno` v1.3.0 for the published Codegen v1 runtime.
 
 ## [1.2.0] - 2026-08-24
 
