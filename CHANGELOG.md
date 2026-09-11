@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- Add `.gouno/codegen.yaml` using the `gouno.dev/codegen/v1` protocol.
+- Ship template-owned codegen sources under `.gouno/codegen/` for controller, domain, repository, service, task, and suite workflows.
+
+### Changed
+
+- The generated project CLI now attaches codegen dynamically from the template manifest; templates without the manifest expose no `gen` command.
+- Move concrete generator policy out of the `gouno` core library and into this default project template.
+- Remove the legacy top-level `templates/*.tmpl` codegen set so the manifest and `.gouno/codegen/` are the single source of truth.
+
 ## [1.2.0] - 2026-08-24
 
 ### Changed
