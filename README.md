@@ -2,7 +2,7 @@
 
 {{.ProjectName}} is a Go web project created from the official [`gouno-template`](https://github.com/rushairer/gouno-template).
 
-> This repository is the **default Gouno project template**, not the definition of every Gouno project. This template intentionally chooses Gin, Cobra, Viper, a layered project layout, and a concrete Codegen catalog. Those are template/project policy. Gouno Core provides reusable mechanisms and the Codegen protocol/runtime without requiring this architecture.
+> This repository is the **default Gouno project template**, not the definition of every Gouno project. This template intentionally chooses Gin, Cobra, Viper, the **Flat Layered** reference profile, and a concrete Codegen catalog. Those are template/project policy. Gouno Core provides reusable mechanisms and the Codegen protocol/runtime without requiring this architecture.
 
 ## Default template choices
 
@@ -11,12 +11,14 @@ This project starts with:
 - **Gin** for HTTP routing;
 - **Cobra** for the project CLI;
 - **Viper** for configuration;
-- a layered `domain` / `repository` / `service` structure;
+- the **Flat Layered** `domain` / `repository` / `service` organization;
 - controller and task packages;
 - graceful shutdown and common middleware wiring;
 - multi-environment configuration;
 - a project-owned Codegen v1 manifest and generator templates;
 - Makefile and development tooling.
+
+Flat Layered is the default reference for simpler applications. Complex applications may instead use a Capability Module project/template policy where business ownership lives under `internal/<capability>/` and layers live inside the capability. The two profiles are project/template conventions; neither is imposed by Gouno Core.
 
 If your team needs a different architecture, build or select a different Gouno Project Template rather than treating these choices as Core requirements.
 
@@ -71,7 +73,7 @@ This template opts into Gouno Codegen v1 through:
 ./bin/gouno gen suite <name>
 ```
 
-`suite` composes the default template's `domain`, `repository`, and `service` generators.
+`suite` composes the default template's `domain`, `repository`, and `service` generators. It is a Flat Layered composition action; it is not a Capability Module generator and its semantics should not be redefined to mean one.
 
 These generator names are **not built-in Gouno Core concepts**. Another template can expose `handler`, `usecase`, `module`, or any other catalog, and a template can omit Codegen completely.
 
@@ -83,7 +85,7 @@ Run the manifest-defined help to see the capabilities that actually ship with th
 
 The normative Codegen protocol is maintained in [`gouno/docs/codegen-template-spec.md`](https://github.com/rushairer/gouno/blob/main/docs/codegen-template-spec.md).
 
-## Project structure
+## Default Flat Layered project structure
 
 The default template uses this layout:
 
@@ -105,6 +107,8 @@ The default template uses this layout:
 ```
 
 The layout is this template's development convention. Evolve it together with `.gouno/codegen.yaml` and the referenced Codegen templates so generated code never drifts from the project's architecture.
+
+Do not casually mix Flat Layered ownership with Capability Module ownership in the same project. If an existing project outgrows global layer buckets, migrate coherent capability slices and update its project-owned Codegen policy accordingly.
 
 ## Configuration
 
@@ -143,7 +147,7 @@ curl http://localhost:8080/test/alive
 
 Project bootstrap behavior is owned by [`gouno-cli`](https://github.com/rushairer/gouno-cli/blob/main/docs/project-template-contract.md). Codegen behavior is split between the Gouno Codegen protocol and this project's `.gouno/codegen.yaml` policy.
 
-For guidance on building your own project template, see [`gouno-doc/template-authoring.md`](https://github.com/rushairer/gouno-doc/blob/main/template-authoring.md).
+For guidance on building your own project template, see [`gouno-doc/template-authoring.md`](https://github.com/rushairer/gouno-doc/blob/main/template-authoring.md). For the ecosystem reference architecture choices, see [`gouno-doc/architecture-profiles.md`](https://github.com/rushairer/gouno-doc/blob/main/architecture-profiles.md).
 
 ## Common Makefile commands
 
@@ -165,7 +169,7 @@ MIT License. See [LICENSE](LICENSE).
 
 {{.ProjectName}} 是基于官方 [`gouno-template`](https://github.com/rushairer/gouno-template) 创建的 Go Web 项目。
 
-> 这是 **Gouno 官方默认 Project Template**，不是所有 Gouno 项目都必须遵循的架构定义。Gin、Cobra、Viper、分层目录以及下面的 Generator 清单，都是这个默认 Template 的工程选择；Gouno Core 只提供可复用机制以及 Codegen 协议/运行时，并不强制这些架构约定。
+> 这是 **Gouno 官方默认 Project Template**，不是所有 Gouno 项目都必须遵循的架构定义。Gin、Cobra、Viper、**Flat Layered** 参考 Profile 以及下面的 Generator 清单，都是这个默认 Template 的工程选择；Gouno Core 只提供可复用机制以及 Codegen 协议/运行时，并不强制这些架构约定。
 
 ## 默认 Template 的技术选择
 
@@ -174,12 +178,14 @@ MIT License. See [LICENSE](LICENSE).
 - Gin HTTP 路由；
 - Cobra 项目 CLI；
 - Viper 配置管理；
-- `domain` / `repository` / `service` 分层；
+- **Flat Layered** `domain` / `repository` / `service` 分层；
 - controller 与 task 包；
 - 优雅停机和常用中间件接线；
 - 多环境配置；
 - 项目自己拥有的 Codegen v1 manifest 与生成模板；
 - Makefile 与开发工具链。
+
+Flat Layered 是简单项目的默认参考 Profile。复杂项目可以采用 Capability Module，让业务 ownership 位于 `internal/<capability>/`，再在 capability 内组织各 Layer。两种 Profile 都属于 Project/Template 约定，不是 Gouno Core 的强制架构。
 
 如果团队偏好其它架构，应创建或选择自己的 Project Template，而不是把默认模板的选择提升成 Gouno Core 规则。
 
@@ -222,7 +228,7 @@ make dev
 ./bin/gouno gen suite <name>
 ```
 
-其中 `suite` 是默认 Template 定义的 `domain + repository + service` 组合。
+其中 `suite` 是默认 Template 定义的 `domain + repository + service` 组合，它属于 Flat Layered 的组合生成动作，不是 Capability Module Generator，也不应被重新定义成后者。
 
 这些名字**不是 Gouno Core 内置概念**。其它 Template 可以使用 `handler`、`usecase`、`module` 等完全不同的词汇，也可以完全不提供 Codegen。
 
@@ -234,7 +240,7 @@ make dev
 
 Codegen 协议的唯一规范见 [`gouno/docs/codegen-template-spec.md`](https://github.com/rushairer/gouno/blob/main/docs/codegen-template-spec.md)。
 
-## 默认项目结构
+## 默认 Flat Layered 项目结构
 
 ```text
 ├── .gouno/          # 项目工具数据 / Codegen Policy
@@ -254,6 +260,8 @@ Codegen 协议的唯一规范见 [`gouno/docs/codegen-template-spec.md`](https:/
 ```
 
 如果调整目录或架构，应同步调整 `.gouno/codegen.yaml` 和它引用的 Codegen 模板，避免生成代码与真实项目结构发生漂移。
+
+不要在同一项目里随意混用 Flat Layered ownership 与 Capability Module ownership。如果现有项目已经超出全局 Layer bucket 的可维护范围，应按完整 Capability Slice 渐进迁移，并同步调整项目自己的 Codegen Policy。
 
 ## 配置
 
@@ -283,7 +291,7 @@ CLI 参数
 
 项目 Bootstrap 行为由 [`gouno-cli` 的 Project Template Contract](https://github.com/rushairer/gouno-cli/blob/main/docs/project-template-contract.md) 定义；Codegen 则由 Gouno 协议与当前项目 `.gouno/codegen.yaml` 共同决定。
 
-开发自己的 Project Template，请阅读 [`gouno-doc` Template Authoring 指南](https://github.com/rushairer/gouno-doc/blob/main/zh-CN/template-authoring.md)。
+开发自己的 Project Template，请阅读 [`gouno-doc` Template Authoring 指南](https://github.com/rushairer/gouno-doc/blob/main/zh-CN/template-authoring.md)；两种参考架构 Profile 见 [`gouno-doc` 架构 Profile 指南](https://github.com/rushairer/gouno-doc/blob/main/zh-CN/architecture-profiles.md)。
 
 ## 许可证
 

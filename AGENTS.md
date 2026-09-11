@@ -6,7 +6,9 @@ This file is intentionally part of the project template and is expected to be in
 
 This project/template owns its application architecture and development conventions. Gouno Core does not prescribe this structure.
 
-The current default template chooses a layered Go web project with its own controller/domain/repository/service/task conventions. Treat those names and boundaries as this template's policy, not as universal Gouno concepts.
+The current default template implements the **Flat Layered** reference profile: application code is organized first by global implementation layer, with controller/domain/repository/service/task conventions. Treat those names and boundaries as this template's policy, not as universal Gouno concepts.
+
+Flat Layered is intended as the default reference for simpler applications. Complex applications may instead choose a Capability Module project/template policy where `internal/<capability>/` is the primary ownership boundary and layers live inside the capability. Do not mix the two ownership models casually inside one project.
 
 Do not move template-specific architecture policy into `github.com/rushairer/gouno` merely to make generation easier.
 
