@@ -1,0 +1,19 @@
+package controller
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/rushairer/gouno"
+)
+
+type {{ camel (arg "name") }}Controller struct {
+}
+
+func New{{ camel (arg "name") }}Controller() *{{ camel (arg "name") }}Controller {
+	return &{{ camel (arg "name") }}Controller{}
+}
+
+func (c *{{ camel (arg "name") }}Controller) Foo(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gouno.NewSuccessResponse("bar"))
+}

@@ -1,0 +1,14 @@
+package domain
+
+import "context"
+
+type {{ camel (arg "name") }} struct {
+}
+
+func New{{ camel (arg "name") }}() *{{ camel (arg "name") }} {
+	return &{{ camel (arg "name") }}{}
+}
+
+func (d *{{ camel (arg "name") }}) Foo(ctx context.Context) (bar string, err error) {
+	return
+}

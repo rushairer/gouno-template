@@ -18,11 +18,35 @@ fi
 cp go.mod "$tmp/go.mod.before"
 cp go.sum "$tmp/go.sum.before"
 go mod tidy
-cmp -s go.mod "$tmp/go.mod.before"
-cmp -s go.sum "$tmp/go.sum.before"
+if ! cmp -s go.mod "$tmp/go.mod.before"; then
+  diff -u "$tmp/go.mod.before" go.mod || true
+  exit 1
+fi
+if ! cmp -s go.sum "$tmp/go.sum.before"; then
+  diff -u "$tmp/go.sum.before" go.sum || true
+  cp go.sum "$root/tidy-go.sum"
+  exit 1
+fi
 go mod download all
+
 gofmt -w .
 test -z "$(gofmt -l .)"
+
+# The default template owns its codegen command tree and implementation.
+go run ./cmd --help | grep -qE '(^|[[:space:]])gen([[:space:]]|$)'
+go run ./cmd gen --help | grep -q 'service'
+go run ./cmd gen service smoke_service
+test -f internal/service/smoke_service.go
+grep -q 'type SmokeServiceService struct' internal/service/smoke_service.go
+
+go run ./cmd gen suite smoke_suite
+test -f internal/domain/smoke_suite.go
+test -f internal/repository/smoke_suite.go
+test -f internal/service/smoke_suite.go
+
+gofmt -w internal/domain internal/repository internal/service
+test -z "$(gofmt -l internal/domain internal/repository internal/service)"
+
 go test -race ./...
 go vet ./...
 go run golang.org/x/vuln/cmd/govulncheck@v1.6.0 ./...
