@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-04
+
 ### Changed
 
 - Upgrade the generated project runtime dependency to the published Gouno Core v1.4.0 release.
