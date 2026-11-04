@@ -61,3 +61,5 @@ Repository-specific CI may enforce additional race, vet, lint, and vulnerability
 
 - The default template's released dependency must be pinned to a published Gouno Core release. Upgrade the Core version only after its immutable tag resolves through the Go module proxy and the exact `go.mod` / `go.sum` checksums are verified.
 - For coordinated Core upgrades, run the freshly rendered project verification on Go 1.26.x and 1.27.x, including tidy-without-diff, generator smoke tests, race, vet, lint, and govulncheck. Keep the generated module's dependency graph authoritative; do not add transitive requirements merely to mirror Core.
+
+- Template CI must set `actions/setup-go` `check-latest: true` for Go version ranges so a cached runner toolchain cannot silently retain an older standard-library patch after a security fix is released.
