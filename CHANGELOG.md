@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Changed
 
 - Formally name the default template's architecture profile **Flat Layered** and document its intended use for simpler applications, while distinguishing it from Capability Module project/template policies used by more complex applications.
+- Require Go 1.26.0 or newer and validate Go 1.26.x / 1.27.x in CI.
+- Upgrade the generated project dependency baseline to `golang.org/x/net` v0.60.0, `x/crypto` v0.58.0, `x/sys` v0.49.0, `x/text` v0.43.0, `x/sync` v0.24.0, and YAML v3.0.6.
+
+### Security
+
+- Remediate reachable HTTP/2 vulnerabilities by enforcing the patched `x/net` v0.60.0 floor in freshly rendered projects.
 
 ## [1.3.0] - 2026-09-11
 
