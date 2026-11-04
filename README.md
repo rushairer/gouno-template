@@ -24,7 +24,7 @@ If your team needs a different architecture, build or select a different Gouno P
 
 ## Requirements
 
-- Go 1.25.0 or newer. Template CI validates Go 1.25.x and 1.26.x.
+- Go 1.26.0 or newer. Template CI validates the latest Go 1.26.x and 1.27.x patch releases.
 
 ## Build and run
 
