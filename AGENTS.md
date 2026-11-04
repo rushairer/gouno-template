@@ -50,3 +50,9 @@ Before accepting changes that affect project structure or Codegen behavior, veri
 - no template/runtime expression was consumed in the wrong rendering stage.
 
 Repository-specific CI may enforce additional race, vet, lint, and vulnerability checks.
+
+## Toolchain and dependency security baseline
+
+- Generated projects from this default template require Go 1.26.0 or newer. Template CI must validate the latest patch releases of Go 1.26.x and 1.27.x.
+- Keep `golang.org/x/net` at v0.60.0 or newer for the October 2026 HTTP/2 advisories. Keep the compatible dependency floors at `golang.org/x/crypto` v0.58.0, `golang.org/x/sys` v0.49.0, `golang.org/x/text` v0.43.0, and `golang.org/x/sync` v0.24.0 or newer.
+- The rendered-project verification script must continue to run tidy, race tests, vet, lint, and `govulncheck`; use `golangci-lint` v2.15.0 or newer for Go 1.27 compatibility. Never suppress reachable findings or downgrade security floors to retain an unsupported Go series.

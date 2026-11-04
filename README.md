@@ -24,7 +24,7 @@ If your team needs a different architecture, build or select a different Gouno P
 
 ## Requirements
 
-- Go 1.25.0 or newer. Template CI validates Go 1.25.x and 1.26.x.
+- Go 1.26.0 or newer. Template CI validates the latest Go 1.26.x and 1.27.x patch releases.
 
 ## Build and run
 
@@ -188,6 +188,10 @@ MIT License. See [LICENSE](LICENSE).
 Flat Layered 是简单项目的默认参考 Profile。复杂项目可以采用 Capability Module，让业务 ownership 位于 `internal/<capability>/`，再在 capability 内组织各 Layer。两种 Profile 都属于 Project/Template 约定，不是 Gouno Core 的强制架构。
 
 如果团队偏好其它架构，应创建或选择自己的 Project Template，而不是把默认模板的选择提升成 Gouno Core 规则。
+
+## 版本要求
+
+生成项目要求 Go 1.26.0 或更高版本。模板 CI 验证 Go 1.26.x 与 1.27.x 的最新补丁版本。
 
 ## 构建与运行
 
