@@ -63,3 +63,9 @@ Repository-specific CI may enforce additional race, vet, lint, and vulnerability
 - For coordinated Core upgrades, run the freshly rendered project verification on Go 1.26.x and 1.27.x, including tidy-without-diff, generator smoke tests, race, vet, lint, and govulncheck. Keep the generated module's dependency graph authoritative; do not add transitive requirements merely to mirror Core.
 
 - Template CI must set `actions/setup-go` `check-latest: true` for Go version ranges so a cached runner toolchain cannot silently retain an older standard-library patch after a security fix is released.
+
+## Template release process
+
+- Publish the default template only after its exact Core dependency is a public immutable release tag and its module checksums are verified.
+- Before publishing a template tag, run the full rendered-project verification on the latest Go 1.26.x and 1.27.x patches with `check-latest: true`, including tidy, Codegen smoke tests, race, vet, lint, and govulncheck.
+- Keep the CLI's pinned-template integration test on the latest released template tag; update it only after the new template tag is public.
