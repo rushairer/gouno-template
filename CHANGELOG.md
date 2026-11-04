@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Upgrade the generated project runtime dependency to the published Gouno Core v1.4.0 release.
 - Formally name the default template's architecture profile **Flat Layered** and document its intended use for simpler applications, while distinguishing it from Capability Module project/template policies used by more complex applications.
 - Require Go 1.26.0 or newer and validate Go 1.26.x / 1.27.x in CI.
 - Use golangci-lint v2.15.0 or newer in rendered-project verification so lint supports Go 1.27.
