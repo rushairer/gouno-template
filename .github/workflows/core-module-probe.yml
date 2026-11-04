@@ -18,4 +18,8 @@ jobs:
       - name: Resolve published Core module
         run: |
           set -euo pipefail
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          cd "$tmp"
+          go mod init example.com/gouno-module-probe
           go mod download -json github.com/rushairer/gouno@v1.4.0
