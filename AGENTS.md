@@ -56,3 +56,10 @@ Repository-specific CI may enforce additional race, vet, lint, and vulnerability
 - Generated projects from this default template require Go 1.26.0 or newer. Template CI must validate the latest patch releases of Go 1.26.x and 1.27.x.
 - Keep `golang.org/x/net` at v0.60.0 or newer for the October 2026 HTTP/2 advisories. Keep the compatible dependency floors at `golang.org/x/crypto` v0.58.0, `golang.org/x/sys` v0.49.0, and `golang.org/x/text` v0.43.0. Do not add `golang.org/x/sync` solely to mirror the Core dependency list; the rendered-project tidy gate must remain authoritative for the template's actual dependency graph.
 - The rendered-project verification script must continue to run tidy, race tests, vet, lint, and `govulncheck`; use `golangci-lint` v2.15.0 or newer for Go 1.27 compatibility. Never suppress reachable findings or downgrade security floors to retain an unsupported Go series.
+
+## Core release compatibility
+
+- The default template's released dependency must be pinned to a published Gouno Core release. Upgrade the Core version only after its immutable tag resolves through the Go module proxy and the exact `go.mod` / `go.sum` checksums are verified.
+- For coordinated Core upgrades, run the freshly rendered project verification on Go 1.26.x and 1.27.x, including tidy-without-diff, generator smoke tests, race, vet, lint, and govulncheck. Keep the generated module's dependency graph authoritative; do not add transitive requirements merely to mirror Core.
+
+- Template CI must set `actions/setup-go` `check-latest: true` for Go version ranges so a cached runner toolchain cannot silently retain an older standard-library patch after a security fix is released.
